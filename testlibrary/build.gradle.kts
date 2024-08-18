@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("maven-publish")
 }
 
 android {
@@ -15,12 +16,15 @@ android {
     }
 
     buildTypes {
-        release {
+        getByName("release") {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+    }
+    publishing {
+        singleVariant("release") {
+            withJavadocJar()
+            withSourcesJar()
         }
     }
     compileOptions {
@@ -30,8 +34,19 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-}
 
+}
+afterEvaluate {
+    publishing{
+        publications {create<MavenPublication>("release") {
+            from(components["release"])
+            groupId = "com.github.bilal-brightsquare"
+            artifactId = "TestLibrary"
+            version = "1.0.0"
+        }
+        }
+    }
+}
 dependencies {
 
     implementation(libs.androidx.core.ktx)
