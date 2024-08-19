@@ -42,7 +42,7 @@ afterEvaluate {
             from(components["release"])
             groupId = "com.github.bilal-brightsquare"
             artifactId = "TestLibrary"
-            version = "1.2"
+            version = "1.3"
         }
         }
     }
